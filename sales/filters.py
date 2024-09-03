@@ -3,6 +3,34 @@ from django_filters import rest_framework as filters
 from sales.models import SalesRecord
 
 
+class EmptyStringFilterMixin:
+    empty_value = "EMPTY_STR"  # Edge case: if a category is named EMPTY_STR we can not filter for it
+
+    def filter(self, qs, value):
+        if value != self.empty_value:
+            return super().filter(qs, value)
+        qs = self.get_method(qs)(**{"%s__%s" % (self.field_name, self.lookup_expr): ""})
+        return qs.distinct() if self.distinct else qs
+
+
+class IsNullStringFilterMixin:
+    null_value = (
+        "NOT_SET"  # Edge case: if a category is named NOT_SET we can not filter for it
+    )
+
+    def filter(self, qs, value):
+        if value != self.null_value:
+            return super().filter(qs, value)
+        qs = self.get_method(qs)(**{"%s__%s" % (self.field_name, "isnull"): True})
+        return qs.distinct() if self.distinct else qs
+
+
+class IsNullEmptyFilter(
+    EmptyStringFilterMixin, IsNullStringFilterMixin, filters.CharFilter
+):
+    pass
+
+
 class SalesRecordFilter(filters.FilterSet):
     """
     A filter set for filtering sales records based on specific criteria.
@@ -23,7 +51,7 @@ class SalesRecordFilter(filters.FilterSet):
     end_date = filters.DateTimeFilter(
         field_name="date_of_sale", lookup_expr="date__lte"
     )
-    category = filters.CharFilter(field_name="product__category")
+    category = IsNullEmptyFilter(field_name="product__category")
 
     class Meta:
         model = SalesRecord

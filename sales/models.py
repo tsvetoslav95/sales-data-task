@@ -34,7 +34,7 @@ class Product(UUIDv7Model):
     """
 
     name = models.CharField(max_length=128)
-    category = models.CharField(max_length=64, null=False, blank=False, db_index=True)
+    category = models.CharField(max_length=64, null=True, db_index=True)
     price = models.DecimalField(max_digits=8, decimal_places=2)
 
     def __str__(self):

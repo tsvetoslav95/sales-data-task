@@ -34,7 +34,7 @@ class SalesRecordListViewTests(APITestCase):
             date_of_sale=datetime.now(),
         )
 
-    def test_get_sales_records(self):
+    def test_get_sales_records(self):  # TBD: add test for empty string and null category filtering
         """
         Test retrieving the list of sales records.
         """
@@ -116,9 +116,7 @@ class SalesRecordAggregateViewTests(APITestCase):
         response = self.client.get(url, {"aggregate_by": "month"})
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(
-            len(response.data), 2
-        )
+        self.assertEqual(len(response.data), 2)
 
         self.assertEqual(response.data[0]["group"], "2024-07")
         self.assertAlmostEqual(response.data[0]["total_sales"], 130)

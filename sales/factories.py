@@ -12,7 +12,7 @@ faker.add_provider(faker_commerce.Provider)
 
 class ProductFactory(factory.django.DjangoModelFactory):
     name = factory.LazyFunction(faker.ecommerce_name)
-    category = factory.LazyFunction(faker.ecommerce_category)
+    category = factory.LazyFunction(faker.ecommerce_category)  # TBD: add null and empty str
     price = factory.Faker(
         "pydecimal", positive=True, min_value=1, max_value=1000, right_digits=2
     )
@@ -28,9 +28,7 @@ class SalesRecordFactory(factory.django.DjangoModelFactory):
         lambda sr: sr.product.price * sr.quantity_sold
     )
     date_of_sale = factory.LazyFunction(
-        lambda: faker.date_time_between(
-            start_date=datetime(2022, 1, 1), end_date="now"
-        )
+        lambda: faker.date_time_between(start_date=datetime(2022, 1, 1), end_date="now")
     )
 
     class Meta:

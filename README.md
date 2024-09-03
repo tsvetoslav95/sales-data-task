@@ -63,13 +63,13 @@ To streamline the setup and deployment process, Docker integration is planned. T
 
 - **docker-compose.yml**: A Docker Compose configuration file will be added to manage multi-container setups, such as the application itself, the database, and other services (e.g., caching, messaging).
 ### Testing
-- **Test Suite Improvements**: Enhance the existing test suite. The current tests (mostly chat gpt :) ) provide basic coverage, but additional, more comprehensive tests will improve reliability.
+- **Test Suite Improvements**: Enhance the existing test suite. The current tests (mostly chat gpt :) ) provide basic coverage, but additional, more comprehensive tests will improve reliability. Currently they do not cover null and empty string category filtering.
 
 ### Code Quality
 - **Import Ordering**: Review and organize import statements according to best practices.
 
 ### Documentation
-- **Enhanced API Schema**: Improve the API schema and documentation. Currently, the project uses `drf-spectacular`, but further refinements are needed, such as providing enums for the `aggregate_by` query parameter and removing unnecessary authentication inputs from the docs page.
+- **Enhanced API Schema**: Improve the API schema and documentation. Currently, the project uses `drf-spectacular`, but further refinements are needed, such as providing enums for the `aggregate_by` query parameter and removing unnecessary authentication inputs from the docs page. 
 
 ### Authentication and Authorization
 - **Authentication Mechanism**: Implement authentication (e.g., Token Auth, JWT, OAuth2) to secure the API.
@@ -77,11 +77,20 @@ To streamline the setup and deployment process, Docker integration is planned. T
 
 ### Pagination
 - **Pagination Strategy**: Consider replacing the current pagination with cursor pagination, which may offer better performance and consistency, especially when the `end_date` filter is not used or is today. UUIDv7 primary keys could be leveraged for this purpose.
-- **Evaluate Query Efficiency**: Determine whether `prefetch_related` or `select_related` is more appropriate for the `sales-data` endpoint. This decision will depend on the expected distribution of products and the frequency of category filtering.
+
+### Edge cases
+- **Empty string or null category filter**: As we are have hardcoded "magic" values EMPTY_STR and NOT_SET in category filter we can not filter by categories named this way
+- **Empty string or null category aggregation**: Should be taken into account that categories can be both empty string and null which is a bad practice. These are 2 different categories and appear separately in aggregated data.
+
+### Non-Edge cases:
+- **DB handles zero division well**: Having returns (negative quantity) in sales record can result in zero divison in aggregation query. DB handles it well and we get null for average_price.
+- **Integer divison in DB**: In aggregation query for average_price if all summed amounts are integers the result is rounded to integer. That's why we need the explicit cast to Float.
 
 ### Database Optimization
 - **UUIDv7 Support in PostgreSQL**: Explore methods to enable PostgreSQL to generate UUIDv7 identifiers natively.
 - **UUID Usage**: Since using UUIDv7 as the primary key is still experimental, consider using incremental primary keys with an additional UUID field for lookups.
 
 ### Query Optimization
-- **Aggregation Query Optimization**: Optimize the aggregation query to avoid redundant `SUM` and `CAST` operations. This will improve the efficiency and performance of the API.  [see comment in code](https://github.com/tsvetoslav95/sales-data-task/blob/7fb767a16bac5d4b9388b66c4b0bb2feb7409b7a/sales/views.py#L77)
+- **Aggregation Query Optimization**: Optimize the aggregation query to avoid redundant `SUM` and `CAST` operations.  [see comment in code](https://github.com/tsvetoslav95/sales-data-task/blob/7fb767a16bac5d4b9388b66c4b0bb2feb7409b7a/sales/views.py#L77)
+- **Evaluate Query Efficiency**: Determine whether `prefetch_related` or `select_related` is more appropriate for the `sales-data` endpoint. This decision will depend on the expected distribution of products accross sales records and the frequency of category filtering.
+
