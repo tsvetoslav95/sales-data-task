@@ -91,6 +91,6 @@ To streamline the setup and deployment process, Docker integration is planned. T
 - **UUID Usage**: Since using UUIDv7 as the primary key is still experimental, consider using incremental primary keys with an additional UUID field for lookups.
 
 ### Query Optimization
-- **Aggregation Query Optimization**: Optimize the aggregation query to avoid redundant `SUM` and `CAST` operations.  [see comment in code](https://github.com/tsvetoslav95/sales-data-task/blob/7fb767a16bac5d4b9388b66c4b0bb2feb7409b7a/sales/views.py#L77)
+- **Aggregation Query Optimization**: Optimize the aggregation query to avoid redundant `SUM` and `CAST` operations.  [see comment in code](https://github.com/tsvetoslav95/sales-data-task/blob/ef8a7248d017408093194c5d9e1251c3964749fa/sales/views.py#L77)
 - **Evaluate Query Efficiency**: Determine whether `prefetch_related` or `select_related` is more appropriate for the `sales-data` endpoint. This decision will depend on the expected distribution of products accross sales records and the frequency of category filtering.
 
