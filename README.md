@@ -61,15 +61,17 @@ To streamline the setup and deployment process, Docker integration is planned. T
 
 - **Dockerfile**: A Dockerfile will be created to containerize the Django application. This ensures that the application runs consistently in any environment.
 
-- **docker-compose.yml**: A Docker Compose configuration file will be added to manage multi-container setups, such as the application itself, the database, and other services (e.g., caching, messaging).
+- **docker-compose.yml**: A Docker Compose configuration file will be added to manage multi-container setups, such as the application itself, the database, and other services (e.g., caching, messaging and other stuff we don't currently need).
 ### Testing
-- **Test Suite Improvements**: Enhance the existing test suite. The current tests (mostly chat gpt :) ) provide basic coverage, but additional, more comprehensive tests will improve reliability. Currently they do not cover null and empty string category filtering.
+- **Test Suite Improvements**: Enhance the existing test suite. The current tests (mostly chat gpt :) ) provide basic coverage, but additional, more comprehensive tests will improve reliability. Currently they do not cover null and empty string category filtering. Factories are not used in tests and they do not generate empty str/null categories
+
 
 ### Code Quality
-- **Import Ordering**: Review and organize import statements according to best practices.
+- **Linting**: Run linter and make sure PEP8 is followed everywhere
+- **Ensure all code is well documented**
 
 ### Documentation
-- **Enhanced API Schema**: Improve the API schema and documentation. Currently, the project uses `drf-spectacular`, but further refinements are needed, such as providing enums for the `aggregate_by` query parameter and removing unnecessary authentication inputs from the docs page. 
+- **Enhanced API Schema**: Improve the API schema and documentation. Currently, the project uses `drf-spectacular` (it was suggested in DRF docs as they are deprecating the old way), but further refinements are needed, such as providing enums for the `aggregate_by` query parameter and removing unnecessary authentication inputs from the docs page. Currenty it is not visible you can filter category by EMPTY_STR and NOT_SET.
 
 ### Authentication and Authorization
 - **Authentication Mechanism**: Implement authentication (e.g., Token Auth, JWT, OAuth2) to secure the API.
