@@ -49,10 +49,6 @@ class AggregatedSalesRecordSerializer(serializers.Serializer):
     """
 
     group = serializers.SerializerMethodField()
-    """
-    ListModelMixin does not try to validate so this works for aggregate_by=category too.
-    Can't guarantee that for future DRF versions so handling it explicitly might be better.
-    """
     total_sales = serializers.DecimalField(max_digits=14, decimal_places=2)
     average_price = serializers.DecimalField(max_digits=9, decimal_places=2)
 
