@@ -30,7 +30,12 @@ class SalesRecordListView(ListAPIView):
     pagination_class = LimitOffsetPagination
     queryset = SalesRecord.objects.prefetch_related(
         "product"
-    )  # since we have filter by product__category select_related might be more efficient in some cases
+    )
+    """
+    select_related is usually chosen for forward FK and since we have filter by product__category it might be more efficient in some cases.
+    prefetch_related can be more efficient if SalesRecords vastly outnumber their related unique Products which is usually the case.
+    Despite having one more db request, the data transfer is less.
+    """
 
 
 @extend_schema_view(
