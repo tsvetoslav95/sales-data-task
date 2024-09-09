@@ -83,6 +83,7 @@ To streamline the setup and deployment process, Docker integration is planned. T
 ### Edge cases
 - **Empty string or null category filter**: As we are have hardcoded "magic" values EMPTY_STR and NOT_SET in category filter we can not filter by categories named this way
 - **Empty string or null category aggregation**: Should be taken into account that categories can be both empty string and null which is a bad practice. These are 2 different categories and appear separately in aggregated data.
+- **Months with no sales** That might be worth mentioning as in the assignment is mentioned this aggregate endpoint will be used for charts in FE. If aggregating by month and there is no sales in a month it will not be present in response at all. FE should expect this behaviour or we should redo BE.
 
 ### Non-Edge cases:
 - **DB handles zero division well**: Having returns (negative quantity) in sales record can result in zero divison in aggregation query. DB handles it well and we get null for average_price.
